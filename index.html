@@ -1144,7 +1144,7 @@ function boot(){
     const lives=parseInt(qp.get("lives")||"0",10);
     if(lv>=1&&lv<=3) G.unlocked=Math.max(G.unlocked,lv);
     if(lives>=1&&lives<=9) G.deepLives=lives;
-    if(au>=1&&au<=3){ G.unlocked=Math.max(G.unlocked,au); skipTitle(); startGame(au-1,true); return; }
+    if(au>=1&&au<=3){ G.unlocked=Math.max(G.unlocked,au); requestAnimationFrame(tick); skipTitle(); startGame(au-1,true); return; } // repair cycle 1: start loop before early return (was a frozen autostart deep link)
   }catch(e){}
   requestAnimationFrame(tick);
 }

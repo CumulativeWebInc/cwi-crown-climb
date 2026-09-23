@@ -1,5 +1,18 @@
 # Crown Climb™ — changelog
 
+## 1.1.1 — 2026-09-23 — REPAIR CYCLE 1 (independent-verifier defect)
+- FIX: `?autostart=N` deep link served a FROZEN game — `boot()` returned before
+  `requestAnimationFrame(tick)`, so the game loop never started (zero physics
+  steps, zero frames). Fix: schedule `requestAnimationFrame(tick)` inside the
+  autostart branch before `return` (one line). Verified headless: boot via
+  `?autostart=2&lives=5` → `G.elapsed` advances, player physics runs.
+- REGRESSION TEST: `tests/autostart-boot.js` (T16) — headless jsdom boot with
+  `?autostart=2` asserts the game loop is scheduled and `G.elapsed` advances.
+- CHANGELOG CORRECTION: the 1.0.0 entry below pre-claimed
+  "Independent verifier: SHIP on fix cycle 0". Correction of record: the
+  independent verifier found one defect in Crown Climb (frozen autostart deep
+  link, FAIL) and it was repaired in cycle 1 — this commit.
+
 ## 1.1.0 — 2026-09-23 — CONTROLS REWORK + INTERFACE ELEVATION
 - CONTROLS (Black's defect report: "the controls are glitching" — iPhone playtest):
   single authoritative Input map fed by keyboard + touch; keyup/blur/focus/
@@ -30,4 +43,7 @@
 - localStorage-only persistence; no backend, no accounts, no secrets, no eval.
 - Twenty Minds run: `TWENTY-MINDS-3GAMES-2026-09-23.md` (decision: ship under the full gate stack).
 - Name screening: `NAME-RESEARCH-2026-09-23.md` (web/trademark/app-store sweep; no exact-title collisions found).
-- Independent verifier: SHIP on fix cycle 0 (logic, links, secrets, security, legal gates all PASS).
+- Independent verifier: SHIP on fix cycle 0 (logic, links, secrets, security,
+  legal gates all PASS). **CORRECTION 2026-09-23 (repair cycle 1): this was
+  pre-claimed before verification ran — the verifier actually found one defect
+  (frozen `?autostart=N` deep link → FAIL), repaired in cycle 1.**
