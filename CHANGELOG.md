@@ -1,5 +1,27 @@
 # Crown Climb™ — changelog
 
+## 1.1.0 — 2026-09-23 — CONTROLS REWORK + INTERFACE ELEVATION
+- CONTROLS (Black's defect report: "the controls are glitching" — iPhone playtest):
+  single authoritative Input map fed by keyboard + touch; keyup/blur/focus/
+  hidden-tab resets make stuck keys impossible (RC-1); touch-action:none on the
+  control buttons + touchcancel/pointercancel release + touch-identifier
+  multi-touch tracking + JS-driven .pressed states (RC-2); jump buffering
+  (0.12s) + coyote time (0.10s) so presses register (RC-3); tier ladders
+  re-seated ON the lower platform so every tier links walk-up (RC-4);
+  dodge roll is now press-edge only — a held DOWN ducks instead of
+  re-rolling (RC-5); fixed 1/60s timestep accumulator (identical feel 60/120Hz).
+- INTERFACE: Bungee + Space Grotesk display typography (verified Google Fonts),
+  translucent HUD top bar with gold rule, chunkier touch buttons (72px dirs,
+  104px JUMP) with gold-glow pressed states, overlay card entrance transitions,
+  button press physics, iPhone safe-area insets, jump/landing dust + level-clear
+  confetti, title best-score, listening-room CTA + try-link kept, Listen dialog
+  (Spotify + Apple Music, skippable, never auto-plays) kept.
+- REGRESSIONS: tests/input-regression.js — 16/16 input-path tests green
+  (was 5/10 before the rework); logic smoke 9/9 (physics, hazards, scoring, save).
+- PLAYTEST DEEP LINKS: ?level=1..3 ?lives=N ?autostart=N (e.g. ?autostart=2&lives=5).
+- IP: re-audited — original characters/art only (crowned climber, vinyl-record
+  and speaker-cabinet hazards); no Nintendo-flavored content anywhere.
+
 ## 1.0.0 — 2026-09-23
 - Launch: Crown Climb™ ships as one self-contained `index.html` on GitHub Pages.
 - Official CWI logo, brand CSS variables, © 2026 Cumulative Web Inc, ™ on the game name, proprietary license header.
