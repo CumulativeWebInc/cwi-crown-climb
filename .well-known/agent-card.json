@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "agent_card_version": "1.0",
+  "name": "Crown Climb™",
+  "url": "https://cumulativewebinc.github.io/cwi-crown-climb/",
+  "provider": {
+    "name": "Cumulative Web Inc",
+    "url": "https://cumulativeweb.com",
+    "contact": "hp@cumulativeweb.com"
+  },
+  "description": "A classic climb-style platformer from Cumulative Web Inc — guide an original crowned climber up tiered platforms and ladders, dodge rolling vinyl records and speaker cabinets, grab diamonds and crowns, across levels named for That Boy Hi Hat tracks (Zooted Zone, Diabolique, Shaka Zulu). Original characters and art only.",
+  "data_truth": "LIVE — self-contained game; no backend, no telemetry",
+  "content_index": "https://cumulativewebinc.github.io/cwi-crown-climb/content.json",
+  "try_links": [
+    {
+      "label": "Play Crown Climb™ free",
+      "url": "https://cumulativewebinc.github.io/cwi-crown-climb/"
+    },
+    {
+      "label": "Explore the full catalog (listening room)",
+      "url": "https://cumulativewebinc.github.io/cwi-listening-room/"
+    }
+  ],
+  "theme_tracks": [
+    "Zooted Zone",
+    "Diabolique",
+    "Shaka Zulu"
+  ],
+  "license": "Proprietary — © 2026 Cumulative Web Inc, all rights reserved. Contact hp@cumulativeweb.com for licensing."
+}
