@@ -1,3 +1,11 @@
+## 2.0.0 — 2026-09-24 — Full rebuild per Black's iPhone defect order ('controller blocking the viewer')
+- Rebuilt from scratch: control deck (D-pad + JUMP) moved BELOW the canvas in normal document flow — zero overlays on gameplay, action fully visible
+- Kept proven mechanics: fixed 1/60s timestep, jump buffer 0.12s + coyote 0.10s, ladders seated on platforms, input reset on blur, touchcancel safety
+- Fixed hazard tunneling via swept landing test (caught by new tests)
+- 2026 design language: neon-noir night city, parallax skyline, glass HUD, Unbounded/Sora
+- Tests: 35/35 PASS (node); node --check clean; IP self-check clean (all art original, no Nintendo references)
+- Kept: CWI logo, Crown Climb™, catalog level names, Listen dialog, CTA + listening-room try-link, © 2026, localStorage saves + top-5, deep links
+
 # Crown Climb™ — changelog
 
 ## 1.1.1 — 2026-09-23 — REPAIR CYCLE 1 (independent-verifier defect)
