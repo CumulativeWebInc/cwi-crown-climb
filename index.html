@@ -282,6 +282,9 @@ const TUNE = {
   coyote: 0.10,          // s — walk-off-edge jump forgiveness
   jbuffer: 0.12,         // s — jump pressed just before landing still jumps
   climb: 175,
+  ladderCool: 0.25,       // s — ladder re-grab suppressed after ANY ladder exit.
+                          // Kills the ladder trap: a held UP/DOWN can never re-grab
+                          // the same instant a dismount lands inside the grab zone.
   rollTime: 0.38, rollSpeed: 430,   // dodge roll: fresh DOWN-press edge while moving
   grabX: 20,             // ladder grab half-width
   nearMissR: 64          // near-miss detection radius
@@ -426,7 +429,7 @@ function touchCancelAll(reg){ reg.clear(); }
 function makePlayer(x, y){
   return { x:x, y:y, w:28, h:52, vx:0, vy:0,
            grounded:false, coyote:0, jbuf:0,
-           climbing:false, ladder:null,
+           climbing:false, ladder:null, ladderCool:0,
            ducking:false, roll:0, rollDir:1, face:1,
            invuln:0, animT:0, maxY:y, dead:false,
            tier:0 };
@@ -470,38 +473,52 @@ function stepPlayer(p, inp, lvl, dt, ev){
   if (p.coyote > 0) p.coyote -= dt;
   if (p.jbuf > 0) p.jbuf -= dt;
   if (p.roll > 0) p.roll -= dt;
+  if (p.ladderCool > 0) p.ladderCool -= dt;
 
   // consume one-shot edges (key-repeat guard lives in the DOM layer)
   if (inp.jumpQueued){ p.jbuf = TUNE.jbuffer; inp.jumpQueued = false; }
   let wantRoll = false;
-  if (inp.downEdge){ wantRoll = true; inp.downEdge = false; }
-  inp.upEdge = false;
+  if (inp.downEdge){ wantRoll = true; }
 
   const cx = () => p.x + p.w/2;
 
-  // ---- ladder grab: ladders are seated on the lower platform ----
-  if (!p.climbing && (inp.up || inp.down)){
-    const L = findLadder(lvl, cx(), p.y + p.h);
-    if (L){ p.climbing = true; p.ladder = L; p.vx = 0; p.vy = 0; p.ducking = false; }
+  // ---- ladder grab: EDGE-triggered (fresh UP/DOWN press only), never level-triggered.
+  // The iPhone ladder trap was here: level-triggered grab + the top dismount landing
+  // inside the grab zone meant every frame re-grabbed and instantly dismounted while
+  // UP was held — vx zeroed each frame, so the player froze at the ladder top forever.
+  // A held direction can move you along a ladder, but only a fresh press grabs one.
+  if (!p.climbing && p.ladderCool <= 0 && (inp.upEdge || inp.downEdge)){
+    // dodge roll wins: a fresh DOWN edge while running rolls, it does not grab a ladder
+    const rolling = inp.downEdge && p.grounded && Math.abs(p.vx) > 60;
+    if (!rolling){
+      const L = findLadder(lvl, cx(), p.y + p.h);
+      if (L){ p.climbing = true; p.ladder = L; p.vx = 0; p.vy = 0; p.ducking = false; }
+    }
   }
+  inp.downEdge = false;
+  inp.upEdge = false;
   if (p.climbing){
     const L = p.ladder;
     const stillOn = L && Math.abs(cx() - L.x) <= TUNE.grabX + 10 &&
                     (p.y + p.h) >= L.yTop - 14 && (p.y + p.h) <= L.yBot + 22;
-    if (!stillOn){ p.climbing = false; p.ladder = null; }
+    if (!stillOn){ p.climbing = false; p.ladder = null; p.ladderCool = TUNE.ladderCool; }
     else {
       const mv = (inp.down ? 1 : 0) - (inp.up ? 1 : 0);
       p.y += mv * TUNE.climb * dt;
       p.x = L.x - p.w/2; // hug the ladder
-      if (p.y + p.h <= L.yTop + 6){           // reached the top — step onto tier
-        p.climbing = false; p.ladder = null;
+      // Dismounts are direction-gated. The old top exit fired regardless of direction,
+      // so pressing DOWN at the top (to start climbing down) instantly dismounted —
+      // climbing DOWN was impossible, and the grab zone overlap caused the trap.
+      if (mv < 0 && p.y + p.h <= L.yTop + 6){   // reached the top — step onto tier
+        p.climbing = false; p.ladder = null; p.ladderCool = TUNE.ladderCool;
         p.y = L.yTop - p.h; p.vy = 0; p.grounded = true;
         ev.push({ t:"checkpoint", x: L.x, y: L.yTop });
-      } else if (p.y + p.h >= L.yBot + 20){   // climbed back down
-        p.climbing = false; p.ladder = null;
+      } else if (mv > 0 && p.y + p.h >= L.yBot){ // climbed back down — stand on the lower tier
+        p.climbing = false; p.ladder = null; p.ladderCool = TUNE.ladderCool;
+        p.y = L.yBot - p.h; p.vy = 0; p.grounded = true;
       }
       if (p.jbuf > 0){                        // jump off ladder
-        p.climbing = false; p.ladder = null;
+        p.climbing = false; p.ladder = null; p.ladderCool = TUNE.ladderCool;
         p.vy = -TUNE.jumpV * 0.92; p.grounded = false; p.jbuf = 0;
         ev.push({ t:"jump" });
       }
