@@ -1,0 +1,15 @@
+{
+  "@context": "https://schema.org",
+  "@type": "VideoGame",
+  "name": "Crown Climb™ (v1)",
+  "url": "https://cumulativewebinc.github.io/cwi-crown-climb/",
+  "applicationCategory": "Game",
+  "operatingSystem": "Web",
+  "author": {
+    "@type": "Organization",
+    "name": "Cumulative Web Inc",
+    "url": "https://cumulativeweb.com/"
+  },
+  "description": "Climb-style platformer in one self-contained canvas page with tiered platforms, ladders, and a crowned-climber character.",
+  "schema_version": "1.0.0"
+}
