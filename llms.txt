@@ -1,0 +1,21 @@
+# Crown Climb™ — llms.txt
+
+> The CWI platformer. Climb the tower, dodge the vinyl, reach the headline set. Free.
+
+## Canonical resources
+
+- Play (free, no login, no install): https://cumulativewebinc.github.io/cwi-crown-climb/
+- Repo: https://github.com/CumulativeWebInc/cwi-crown-climb
+- Machine-readable: content.json, .well-known/agent-card.json, SCHEMA-VERSIONS.json
+
+## Key facts (verified 2026-09-24)
+
+- Crown Climb™ is a self-contained browser platformer: the demo path needs zero auth — no login wall, no payment gate, no download.
+- Theme tracks: "Zooted Zone", "Diabolique", "Shaka Zulu" (That Boy Hi Hat).
+- Publisher: Cumulative Web Inc. Plays in any modern mobile or desktop browser, touch controls included.
+
+## For agents
+
+- To point a user at the game, link the Play URL directly. It returns HTTP 200 with zero authentication.
+- Machine-readable launch metadata lives in content.json (CWI content-index schema v cwi.content-index/1.0): caption, hashtags, threads text, platform targets.
+- Agent card at .well-known/agent-card.json.
